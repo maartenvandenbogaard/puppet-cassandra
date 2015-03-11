@@ -51,14 +51,17 @@ class cassandra::config(
     $client_encryption_truststore_password,
     $client_encryption_cipher_suites,
 ) {
-    group { 'cassandra':
-        ensure  => present,
-        require => Class['Cassandra::Install'],
-    }
 
-    user { 'cassandra':
-        ensure  => present,
-        require => Group['cassandra'],
+    if ($::cassandra::manage_user) {
+      group { 'cassandra':
+          ensure  => present,
+          require => Class['Cassandra::Install'],
+      }
+
+      user { 'cassandra':
+          ensure  => present,
+          require => Group['cassandra'],
+      }
     }
 
     File {

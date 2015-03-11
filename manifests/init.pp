@@ -64,6 +64,7 @@ class cassandra(
     $client_encryption_truststore           = $cassandra::params::client_encryption_truststore,
     $client_encryption_truststore_password  = $cassandra::params::client_encryption_truststore_password,
     $client_encryption_cipher_suites        = $cassandra::params::client_encryption_cipher_suites,
+    $manage_user                            = $cassandra::params::manage_user,
 
 ) inherits cassandra::params {
     # Validate input parameters
@@ -112,6 +113,9 @@ class cassandra(
     validate_string($client_encryption_truststore_password)
     validate_array($client_encryption_cipher_suites)
 
+    validate_bool($manage_user)
+    validate_string($template_cassandra_yaml)
+    validate_string($template_cassandra_env_sh)
     if(!is_integer($jmx_port)) {
         fail('jmx_port must be a port number between 1 and 65535')
     }

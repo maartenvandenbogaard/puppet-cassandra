@@ -345,5 +345,9 @@ class cassandra::params {
         undef   => [],
         default => $::cassandra_client_encryption_cipher_suites,
     }
+    $manage_user = $::cassandra_manage_user ? {
+        undef   => true,
+        default => $::cassandra_manage_user,
+    }
 
 }
