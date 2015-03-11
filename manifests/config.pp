@@ -1,5 +1,4 @@
 class cassandra::config(
-    $version,
     $config_path,
     $max_heap_size,
     $heap_newsize,
@@ -50,6 +49,8 @@ class cassandra::config(
     $client_encryption_truststore,
     $client_encryption_truststore_password,
     $client_encryption_cipher_suites,
+    $template_cassandra_yaml,
+    $template_cassandra_env_sh,
 ) {
 
     if ($::cassandra::manage_user) {
@@ -77,11 +78,11 @@ class cassandra::config(
 
     file { "${config_path}/cassandra-env.sh":
         ensure  => file,
-        content => template("${module_name}/cassandra-env${version}.sh.erb"),
-    }
-    file { "${config_path}/cassandra.yaml":
-        ensure  => file,
-        content => template("${module_name}/cassandra${version}.yaml.erb"),
+        content => template($template_cassandra_env_sh),
     }
 
+    file { "${config_path}/cassandra.yaml":
+        ensure  => file,
+        content => template($template_cassandra_yaml),
+    }
 }

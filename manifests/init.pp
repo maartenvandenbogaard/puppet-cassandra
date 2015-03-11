@@ -65,6 +65,8 @@ class cassandra(
     $client_encryption_truststore_password  = $cassandra::params::client_encryption_truststore_password,
     $client_encryption_cipher_suites        = $cassandra::params::client_encryption_cipher_suites,
     $manage_user                            = $cassandra::params::manage_user,
+    $template_cassandra_yaml                = $cassandra::params::template_cassandra_yaml,
+    $template_cassandra_env_sh              = $cassandra::params::template_cassandra_env_sh,
 
 ) inherits cassandra::params {
     # Validate input parameters
@@ -184,13 +186,7 @@ class cassandra(
 
     include cassandra::install
 
-    $version_config = $cassandra::version ? {
-      default   =>  regsubst($cassandra::version, '^(\d\.\d+).*$', '\1'),
-      /^1/      =>  regsubst($cassandra::version, '\..*$', ''),
-    }
-
     class { 'cassandra::config':
-        version                               => $version_config,
         config_path                           => $config_path,
         max_heap_size                         => $max_heap_size,
         heap_newsize                          => $heap_newsize,
@@ -241,6 +237,8 @@ class cassandra(
         client_encryption_truststore          => $client_encryption_truststore,
         client_encryption_truststore_password => $client_encryption_truststore_password,
         client_encryption_cipher_suites       => $client_encryption_cipher_suites,
+        template_cassandra_yaml               => $template_cassandra_yaml,
+        template_cassandra_env_sh             => $template_cassandra_env_sh,
 }
 
 

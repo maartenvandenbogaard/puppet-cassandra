@@ -350,4 +350,18 @@ class cassandra::params {
         default => $::cassandra_manage_user,
     }
 
+    $version_config = $cassandra::version ? {
+      default   =>  regsubst($version, '^(\d\.\d+).*$', '\1'),
+      /^1/      =>  regsubst($version, '\..*$', ''),
+    }
+
+    $template_cassandra_yaml = $::cassandra_template_cassandra_yaml ? {
+        undef   => "cassandra/cassandra${version_config}.yaml.erb",
+        default => $::cassandra_template_cassandra_yaml
+    }
+
+    $template_cassandra_env_sh = $::cassandra_template_cassandra_env_sh ? {
+        undef   => "cassandra/cassandra-env${version_config}.sh.erb",
+        default => $::cassandra_template_cassandra_env_sh
+    }
 }
